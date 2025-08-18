@@ -1,0 +1,34 @@
+const mongoose = require("mongoose");
+const Schema = mongoose.Schema;
+
+const listingSchema = new Schema({
+    title: {
+        type: String,
+        required: true,
+        trim: true
+    },
+    description: {
+        type: String,
+        required: true
+    },
+    url: {
+        type: String, 
+        default: "https://via.placeholder.com/300"
+    },
+    price: {
+        type: Number,
+        required: true,
+        min: 0
+    },
+    location: {
+        type: String,
+        required: true
+    },
+    country: {
+        type: String,
+        required: true
+    }
+});
+
+const Listing = mongoose.model("Listing", listingSchema);
+module.exports = Listing;
