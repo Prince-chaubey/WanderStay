@@ -17,9 +17,12 @@ async function main() {
 
 main();
 
+const methodOverride = require("method-override");
+app.use(methodOverride("_method"));
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 app.use(expressLayouts);
+app.use(express.urlencoded({ extended: true }));
 app.set("layout", "./layouts/boilerplate");
 
 
@@ -30,12 +33,39 @@ app.get("/listings", async (req, res) => {
   res.render("views/index", { listings }); 
 });
 
+//Route to get redirect to a new listing create form
+app.get("/listings/new",(req,res)=>{
+  res.render("views/newListing");
+})
+
+//Route to save the new listing data in Database
+app.post("/listings/new",async(req,res)=>{
+  const newListing=new allListing(req.body);
+  await newListing.save();
+  res.redirect(`/listings`);
+})
+
 //Route for a particular listing
 app.get("/listings/:id",async(req,res)=>{
     const id=req.params.id;
     const listing=await allListing.findById(id);
     res.render("views/show",{listing});
 })
+
+//Route to delete a particular listing
+app.delete("/listings/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    await allListing.findByIdAndDelete(id);
+    res.redirect("/listings");
+  } catch (err) {
+    console.log(err);
+    res.send("Cannot find the listing!");
+  }
+});
+
+
+
 
 
 app.listen(8080, () => {
