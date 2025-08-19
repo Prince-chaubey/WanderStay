@@ -1,10 +1,14 @@
 const express = require("express");
-const app = express();
 const mongoose = require("mongoose");
-const allListing = require("./Models/allListing");
 const path = require("path");
+const methodOverride = require("method-override");
 const expressLayouts = require("express-ejs-layouts");
 
+const allListing = require("./Models/allListing");
+
+const app = express();
+
+// -------------------- Database Connection --------------------
 async function main() {
   try {
     await mongoose.connect("mongodb://127.0.0.1:27017/wanderstay");
@@ -14,45 +18,65 @@ async function main() {
     process.exit(1);
   }
 }
-
 main();
 
-const methodOverride = require("method-override");
-app.use(methodOverride("_method"));
+// -------------------- Middleware --------------------
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
-app.use(expressLayouts);
-app.use(express.urlencoded({ extended: true }));
 app.set("layout", "./layouts/boilerplate");
 
+app.use(expressLayouts);
+app.use(express.urlencoded({ extended: true }));
+app.use(methodOverride("_method"));
 
-//Route for the whole listings
+// -------------------- Routes --------------------
 
+// Home - All Listings
 app.get("/listings", async (req, res) => {
   const listings = await allListing.find({});
-  res.render("views/index", { listings }); 
+  res.render("views/index", { listings });
 });
 
-//Route to get redirect to a new listing create form
-app.get("/listings/new",(req,res)=>{
+
+// New Listing Form
+app.get("/listings/new", (req, res) => {
   res.render("views/newListing");
-})
+});
 
-//Route to save the new listing data in Database
-app.post("/listings/new",async(req,res)=>{
-  const newListing=new allListing(req.body);
+
+// Save New Listing
+app.post("/listings/new", async (req, res) => {
+  const newListing = new allListing(req.body);
   await newListing.save();
-  res.redirect(`/listings`);
-})
+  res.redirect("/listings");
+});
 
-//Route for a particular listing
-app.get("/listings/:id",async(req,res)=>{
-    const id=req.params.id;
-    const listing=await allListing.findById(id);
-    res.render("views/show",{listing});
-})
 
-//Route to delete a particular listing
+// Show a Particular Listing
+app.get("/listings/:id", async (req, res) => {
+  const { id } = req.params;
+  const listing = await allListing.findById(id);
+  res.render("views/show", { listing });
+});
+
+
+// Edit Listing Form
+app.get("/listings/:id/edit", async (req, res) => {
+  const { id } = req.params;
+  const listing = await allListing.findById(id);
+  res.render("views/editListing", { listing });
+});
+
+
+// Update Listing
+app.put("/listings/:id", async (req, res) => {
+  const { id } = req.params;
+  await allListing.findByIdAndUpdate(id, req.body);
+  res.redirect(`/listings/${id}`);
+});
+
+
+// Delete Listing
 app.delete("/listings/:id", async (req, res) => {
   const { id } = req.params;
   try {
@@ -60,14 +84,11 @@ app.delete("/listings/:id", async (req, res) => {
     res.redirect("/listings");
   } catch (err) {
     console.log(err);
-    res.send("Cannot find the listing!");
+    res.send("Cannot delete the listing!");
   }
 });
 
-
-
-
-
+// -------------------- Server --------------------
 app.listen(8080, () => {
-  console.log(`server running at the port 8080`);
+  console.log("Server running at http://localhost:8080");
 });
