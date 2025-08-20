@@ -1,52 +1,51 @@
-<body class="bg-gradient-to-br from-indigo-100 via-purple-100 to-pink-100 min-h-screen  flex items-center justify-center font-sans px-4 ">
-
+<body class="bg-gradient-to-br from-indigo-100 via-purple-100 to-pink-100 min-h-screen flex items-center justify-center font-sans px-4">
   <div class="bg-white/90 backdrop-blur-md shadow-2xl rounded-2xl max-w-2xl w-full p-[50px] mt-[100px] mx-auto">
     <h2 class="text-2xl md:text-3xl font-bold text-gray-800 text-center mb-6">📝 Create a New Listing</h2>
     
-    <form action="/listings/new" method="POST" class="space-y-5 ">
-      <!-- Title -->
+    <form id="listingForm" action="/listings/new" method="POST" class="space-y-5">
       <div>
         <label class="block text-gray-700 font-medium mb-1">Title</label>
-        <input type="text" name="title" placeholder="Cozy Beach House" required
-          class="w-full px-4 py-2 rounded-lg boader border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition outline-none" />
+        <input type="text" name="title" placeholder="Cozy Beach House"
+          class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition outline-none" />
+        <p class="text-red-500 text-sm mt-1 hidden" id="titleError"></p>
       </div>
 
-      <!-- Location -->
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
           <label class="block text-gray-700 font-medium mb-1">Location</label>
-          <input type="text" name="location" placeholder="Goa" required
+          <input type="text" name="location" placeholder="Goa"
             class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition outline-none" />
+          <p class="text-red-500 text-sm mt-1 hidden" id="locationError"></p>
         </div>
         <div>
           <label class="block text-gray-700 font-medium mb-1">Country</label>
-          <input type="text" name="country" placeholder="India" required
+          <input type="text" name="country" placeholder="India"
             class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition outline-none" />
+          <p class="text-red-500 text-sm mt-1 hidden" id="countryError"></p>
         </div>
       </div>
 
-      <!-- Price -->
       <div>
         <label class="block text-gray-700 font-medium mb-1">Price (₹ per night)</label>
-        <input type="number" name="price" placeholder="1500" required min="1"
+        <input type="text" name="price" placeholder="1500"
           class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition outline-none" />
+        <p class="text-red-500 text-sm mt-1 hidden" id="priceError"></p>
       </div>
 
-      <!-- Image URL -->
       <div>
         <label class="block text-gray-700 font-medium mb-1">Image URL</label>
-        <input type="url" name="url" placeholder="https://example.com/image.jpg" required
+        <input type="url" name="url" placeholder="https://example.com/image.jpg"
           class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition outline-none" />
+        <p class="text-red-500 text-sm mt-1 hidden" id="urlError"></p>
       </div>
 
-      <!-- Description -->
       <div>
         <label class="block text-gray-700 font-medium mb-1">Description</label>
         <textarea name="description" rows="4" placeholder="Write a short description about the place..."
           class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition outline-none"></textarea>
+        <p class="text-red-500 text-sm mt-1 hidden" id="descriptionError"></p>
       </div>
 
-      <!-- Submit -->
       <button type="submit"
         class="w-full py-3 bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-semibold rounded-xl shadow-lg hover:from-indigo-600 hover:to-purple-700 transition-all">
         ➕ Create Listing
@@ -54,4 +53,63 @@
     </form>
   </div>
 
+  <script>
+    const form = document.getElementById("listingForm");
+
+    form.addEventListener("submit", function (e) {
+      let isValid = true;
+
+      const title = form.title.value.trim();
+      const location = form.location.value.trim();
+      const country = form.country.value.trim();
+      const price = form.price.value.trim();
+      const url = form.url.value.trim();
+      const description = form.description.value.trim();
+
+
+      // Reset error messages
+      document.querySelectorAll("p[id$='Error']").forEach(err => {
+        err.classList.add("hidden");
+        err.innerText = "";
+      });
+
+      if (title.length < 3) {
+        document.getElementById("titleError").innerText = "Title must be at least 3 characters.";
+        document.getElementById("titleError").classList.remove("hidden");
+        isValid = false;
+      }
+
+      if (location.length < 2) {
+        document.getElementById("locationError").innerText = "Location must be at least 2 characters.";
+        document.getElementById("locationError").classList.remove("hidden");
+        isValid = false;
+      }
+
+      if (country.length < 2) {
+        document.getElementById("countryError").innerText = "Country must be at least 2 characters.";
+        document.getElementById("countryError").classList.remove("hidden");
+        isValid = false;
+      }
+
+      if (!price || price <= 0) {
+        document.getElementById("priceError").innerText = "Price must be greater than 0.";
+        document.getElementById("priceError").classList.remove("hidden");
+        isValid = false;
+      }
+      if(url.length==0){
+        document.getElementById("urlError").innerText="Image URL is required to create a listing.";
+        document.getElementById("urlError").classList.remove("hidden");
+      }
+
+      if (description.length < 10) {
+        document.getElementById("descriptionError").innerText = "Description must be at least 10 characters.";
+        document.getElementById("descriptionError").classList.remove("hidden");
+        isValid = false;
+      }
+
+      if (!isValid) {
+        e.preventDefault();
+      }
+    });
+  </script>
 </body>
