@@ -7,7 +7,8 @@ const expressLayouts = require("express-ejs-layouts");
 // Models & Utilities
 const allListing = require("./Models/allListing");
 const Review = require("./Models/Review");
-const listingSchema = require("./validateListing");
+const {validateListing}=require("./validatation");
+const {validateReview}=require("./validatation");
 const wrapAsync = require("./utils/wrapAsync");
 const ExpressError = require("./utils/expressError");
 
@@ -37,13 +38,29 @@ app.use(methodOverride("_method"));
 
 // Listing Validation Middleware
 const validateListingMiddleware = (req, res, next) => {
-  let { err } = listingSchema.validate(req.body);
-  if (err) {
-    throw new ExpressError(400, err);
-  } else {
+  let { error } = validateListing.validate(req.body);
+  if (error) {
+  const msg = error.details.map(el => el.message).join(", ");
+  throw new ExpressError(400, msg);
+}
+ else {
     next();
   }
 };
+
+
+//Review validation middlware
+const validateReviewMiddleware=(req,res,next)=>{
+  const {rating,comment}=req.body;
+  let {error}=validateReview.validate({rating,comment});
+  //console.log(error.details);
+ if (error) {
+  const msg = error.details.map(el => el.message).join(", ");
+  throw new ExpressError(400, msg);
+} else {
+  next();
+}
+}
 
 // Home - All Listings
 app.get(
@@ -73,6 +90,7 @@ app.post(
 // Create Review
 app.post(
   "/listings/:id/reviews",
+  validateReviewMiddleware,
   wrapAsync(async (req, res) => {
     const { id } = req.params;
     const listing = await allListing.findById(id);
@@ -137,15 +155,13 @@ app.delete(
 
 
 // Error Handling
-app.use((req, res, next) => {
-  next(new ExpressError(404, "Page not found!"));
-});
 
 // Error Handler Middleware
 app.use((err, req, res, next) => {
+  console.log(err);
   const code = err.code || 500;
   const message = err.message || "Something went wrong!";
-  res.status(code).send(message);
+  res.status(code).render("views/error",{code,message});
 });
 
 // ============================================================

@@ -1,6 +1,6 @@
 const Joi = require("joi");
 
-const listingSchema = Joi.object({
+const validateListing = Joi.object({
   title: Joi.string().required().messages({
     "string.empty": "Title is required"
   }),
@@ -19,8 +19,19 @@ const listingSchema = Joi.object({
     "string.empty": "Image URL is required",
     "string.uri": "Image URL must be a valid URL"
   }),
-  description: Joi.string().allow("").messages({
+  description: Joi.string().required().messages({
+    "string.empty": "Description is required"
   })
 });
 
-module.exports = listingSchema;
+const validateReview = Joi.object({
+  rating: Joi.number().required().messages({
+    "any.required": "Rating is required to submit a review",
+    "number.base": "Rating must be a number"
+  }),
+  comment: Joi.string().required().messages({
+    "string.empty": "Comment is required to submit a review"
+  })
+});
+
+module.exports = { validateReview, validateListing };
