@@ -12,7 +12,8 @@ const wrapAsync=require("../utils/wrapAsync");
 
 // Listing Validation Middleware
 const validateListingMiddleware = (req, res, next) => {
-  let { error } = validateListing.validate(req.body);
+  console.log(req.body.listing);
+  let { error } = validateListing.validate(req.body.listing);
   if (error) {
   const msg = error.details.map(el => el.message).join(", ");
   throw new ExpressError(400, msg);
@@ -43,15 +44,14 @@ listingRouter.get("/new", (req, res) => {
 // Save New Listing
 listingRouter.post(
   "/new",
-  validateListingMiddleware,
+   validateListingMiddleware,
   wrapAsync(async (req, res) => {
+    //console.log(req.body);
     const newListing = new allListing(req.body);
     await newListing.save();
-    res.redirect("/");
+    res.redirect("/listings");
   })
 );
-
-
 
 // Show a Particular Listing
 listingRouter.get(
@@ -85,7 +85,7 @@ listingRouter.put(
       new: true,
     });
     if (!updatedListing) throw new ExpressError(404, "Listing not found");
-    res.redirect(`/${id}`);
+    res.redirect(`/listings/${id}`);
   })
 );
 
@@ -96,7 +96,7 @@ listingRouter.delete(
     const { id } = req.params;
     const deleted = await allListing.findByIdAndDelete(id);
     if (!deleted) throw new ExpressError(404, "Listing not found");
-    res.redirect("/");
+    res.redirect("/listings");
   })
 );
 
