@@ -153,6 +153,19 @@ app.delete(
   })
 );
 
+//Delete a review
+app.delete("/listings/:id/reviews/:reviewId",wrapAsync(async(req,res)=>{
+  const {id,reviewId}=req.params;
+
+  await Review.findByIdAndDelete(reviewId);
+
+  await allListing.findByIdAndUpdate(id,{$pull:{reviews:reviewId}});
+
+  res.redirect(`/listings/${id}`);
+
+
+}))
+
 
 // Error Handling
 

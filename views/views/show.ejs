@@ -13,11 +13,10 @@
     </p>
   </header>
 
-
   <div
     class="bg-white rounded-3xl mx-auto shadow-xl max-w-3xl w-full overflow-hidden hover:shadow-2xl transition duration-300 justify-center">
 
-
+    <!-- Image -->
     <div class="relative">
       <img src="<%= listing.url %>" alt="Listing Image" class="w-full h-72 md:h-96 object-cover">
       <span
@@ -26,30 +25,26 @@
       </span>
     </div>
 
-
+    <!-- Details -->
     <div class="p-8">
-
       <div class="flex flex-col md:flex-row justify-between md:items-center gap-2">
-
         <p class="text-lg md:text-xl font-bold text-indigo-600">
           ₹<%= listing.price %>
           <span class="text-sm text-gray-500 font-medium">/ night</span>
         </p>
       </div>
 
-
       <p class="mt-4 text-gray-700 text-sm md:text-base leading-relaxed">
         <%= listing.description %>
       </p>
 
-
+      <!-- Features -->
       <div class="mt-6 grid grid-cols-2 md:grid-cols-4 gap-3 text-sm md:text-base text-gray-600">
         <div class="flex items-center gap-2">🛏️ <span>2 Beds</span></div>
         <div class="flex items-center gap-2">🚿 <span>1 Bath</span></div>
         <div class="flex items-center gap-2">📶 <span>WiFi</span></div>
         <div class="flex items-center gap-2">🌆 <span>City View</span></div>
       </div>
-
 
       <!-- ⭐ Rating & Comment Section -->
       <div class="mt-10 border-t pt-6">
@@ -85,7 +80,6 @@
         </form>
       </div>
 
-
       <!-- 📌 Display Reviews -->
       <% if(listing.reviews && listing.reviews.length > 0) { %>
       <div class="mt-10 border-t pt-6">
@@ -105,7 +99,18 @@
                     <% } %>
                   <% } %>
                 </div>
-                <span class="text-xs text-gray-500"><%= review.createdAt.toDateString() %></span>
+
+                <div class="flex items-center gap-3">
+                  <span class="text-xs text-gray-500"><%= review.createdAt.toDateString() %></span>
+
+                  <!-- Delete Review -->
+                  <form action="/listings/<%= listing._id %>/reviews/<%= review._id %>?_method=DELETE" method="POST">
+                    <button type="submit"
+                      class="text-red-500 hover:text-red-700 text-xs font-medium transition">
+                      🗑️ Delete
+                    </button>
+                  </form>
+                </div>
               </div>
               <p class="text-gray-700 text-sm md:text-base leading-relaxed">
                 <%= review.comment %>
@@ -116,7 +121,7 @@
       </div>
       <% } %>
 
-
+      <!-- Back and Edit Buttons -->
       <div class="mt-8 flex flex-col sm:flex-row justify-between gap-4">
         <a href="/listings" class="flex-1">
           <button
@@ -135,9 +140,7 @@
     </div>
   </div>
 
-
   <footer class="mt-12 text-gray-500 text-xs md:text-sm text-center ">
     © <%= new Date().getFullYear() %> WanderStay • Cozy stays worldwide 🌍
   </footer>
-
 </body>
