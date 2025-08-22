@@ -37,9 +37,25 @@ listingRouter.get(
 );
 
 // New Listing Form
-listingRouter.get("/new", (req, res) => {
+listingRouter.get("/new", async(req, res) => {
   res.render("views/newListing");
 });
+
+//To search new listing
+// Search Route (GET)
+listingRouter.get("/search", wrapAsync(async (req, res) => {
+  const { query } = req.query;   
+  console.log(query);
+  if (!query) {
+    return res.redirect("/listings"); 
+  }
+
+  const listing = await allListing.findOne({title:query});
+
+  // Render results page
+  res.render("views/show.ejs", { listing});
+}));
+
 
 // Save New Listing
 listingRouter.post(
