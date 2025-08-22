@@ -3,26 +3,26 @@
   <nav class="bg-white/90 backdrop-blur-sm border-b shadow-sm fixed w-full z-50 top-0">
     <div class="container mx-auto px-6 py-3 flex items-center justify-between">
       
-      <!-- Brand -->
+     
       <a href="/listings" class="flex items-center gap-2 text-blue-600 font-extrabold text-2xl tracking-tight">
         <i class="fa-solid fa-compass text-3xl"></i>
         <span>WanderStay</span>
       </a>
 
-      <!-- Mobile Menu Button -->
+     
       <button id="menu-btn" class="md:hidden text-gray-700 text-2xl focus:outline-none hover:text-blue-600 transition">
         <i class="fa-solid fa-bars"></i>
       </button>
 
-      <!-- Menu -->
+     
       <div id="menu" class="hidden md:flex md:items-center md:gap-8 text-gray-600 font-medium text-lg">
          
         <ul class="flex flex-col md:flex-row items-center gap-4 md:gap-8 text-center md:text-left">
           <li class="w-full md:w-auto">
-            <!-- Search Form -->
+           
             <form action="/listings/search" method="GET" class="w-full md:w-72">
               <div class="flex items-center bg-gray-50 rounded-full shadow-sm border border-gray-200 overflow-hidden">
-                <!-- Search Icon -->
+                
                 <span class="pl-3 text-gray-400">
                   <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
                     viewBox="0 0 24 24" stroke="currentColor">
@@ -31,7 +31,7 @@
                   </svg>
                 </span>
 
-                <!-- Input -->
+                
                 <input 
                   type="text" 
                   name="query" 
@@ -40,7 +40,7 @@
                   value="<%= typeof query !== 'undefined' ? query : '' %>"
                 />
 
-                <!-- Button -->
+               
                 <button 
                   type="submit"
                   class="bg-blue-600 text-white px-4 py-2 text-sm hover:bg-blue-700 transition">
@@ -50,7 +50,7 @@
             </form>
           </li>
 
-          <!-- Links -->
+        
           <li>
             <a href="/listings" class="relative hover:text-blue-600 transition group">
               Explore
@@ -65,13 +65,13 @@
           </li>
         </ul>
 
-        <!-- Auth Buttons -->
+       
         <div class="flex flex-col md:flex-row gap-3 items-center mt-4 md:mt-0">
-          <a href="/login" 
+          <a href="/user/login"
              class="bg-blue-600 text-white px-6 py-2 rounded-full font-semibold shadow hover:bg-blue-700 hover:shadow-md active:scale-95 transition">
             Log In
           </a>
-          <a href="/logout" 
+          <a href="/user/logout" 
              class="bg-red-600 text-white px-6 py-2 rounded-full font-semibold shadow hover:bg-red-700 hover:shadow-md active:scale-95 transition">
             Log Out
           </a>

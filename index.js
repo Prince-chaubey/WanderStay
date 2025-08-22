@@ -6,6 +6,7 @@ const expressLayouts = require("express-ejs-layouts");
 const ExpressError = require("./utils/expressError");
 const listingRouter=require("./router/listingRouter");
 const reviewRouter = require("./router/reviewRouter");
+const userRouter = require("./router/userRouter");
 
 const app = express();
 
@@ -41,6 +42,7 @@ app.use(methodOverride("_method"));
 // ======================listing Router=================================================================
 app.use("/listings",listingRouter);
 app.use("/listings/:id/reviews",reviewRouter);
+app.use("/user",userRouter);
 
 
 
