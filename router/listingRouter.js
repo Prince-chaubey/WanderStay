@@ -65,6 +65,7 @@ listingRouter.post(
     //console.log(req.body);
     const newListing = new allListing(req.body);
     await newListing.save();
+    req.flash("success","Congratulations we listed your home!");
     res.redirect("/listings");
   })
 );
@@ -101,6 +102,8 @@ listingRouter.put(
       new: true,
     });
     if (!updatedListing) throw new ExpressError(404, "Listing not found");
+    else req.flash("success","Listing edited successfully!");
+    
     res.redirect(`/listings/${id}`);
   })
 );
@@ -112,6 +115,7 @@ listingRouter.delete(
     const { id } = req.params;
     const deleted = await allListing.findByIdAndDelete(id);
     if (!deleted) throw new ExpressError(404, "Listing not found");
+    req.flash("error","Listing Delete successfully !");
     res.redirect("/listings");
   })
 );

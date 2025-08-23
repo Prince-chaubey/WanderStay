@@ -7,7 +7,8 @@ const ExpressError = require("./utils/expressError");
 const listingRouter=require("./router/listingRouter");
 const reviewRouter = require("./router/reviewRouter");
 const userRouter = require("./router/userRouter");
-
+const session=require("express-session");
+const flash=require("connect-flash");
 const app = express();
 
 
@@ -32,11 +33,23 @@ app.set("layout", "./layouts/boilerplate");
 app.use(expressLayouts);
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
+app.use(session({
+  secret: "#Ashish1234@",
+  resave: false,
+  saveUninitialized: true,
+  cookie:{
+    expires:Date.now()+1000*60*60*24*3,
+    maxAge:1000*60*60*24*3,
+    httpOnly:true
+  }
+}))
+app.use(flash());
+app.use((req,res,next)=>{
+  res.locals.success=req.flash("success");
+  res.locals.error=req.flash("error");
 
-
-
-
-
+  next();
+})
 
 
 // ======================listing Router=================================================================
