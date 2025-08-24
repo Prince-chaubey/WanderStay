@@ -78,8 +78,7 @@ userRouter.post("/login", wrapAsync(async (req, res) => {
         maxAge: 3600000
     });
     
-    //saving the user in locals
-    res.locals.user=user;
+   
     req.flash("success", `${email} Logged in successfully!`);
     res.redirect("/listings");
 }));

@@ -19,7 +19,7 @@ main();
 //Pushing the fresh data....
 
 const insertData=async()=>{
-    await allListing.deleteMany({});
+    await allListing.deleteMany({});    
     await allListing.insertMany(data);
     console.log("Database Intitalised!");
 }

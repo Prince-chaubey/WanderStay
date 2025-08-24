@@ -1,11 +1,11 @@
-const express=require("express");
-const listingRouter=express.Router();
+const express = require("express");
+const listingRouter = express.Router();
 const allListing = require("../Models/allListing");
 const Review = require("../Models/Review");
-const {validateListing}=require("../validatation");
-
+const { validateListing } = require("../validatation");
 const ExpressError = require("../utils/expressError");
-const wrapAsync=require("../utils/wrapAsync");
+const wrapAsync = require("../utils/wrapAsync");
+const authenticateJWT = require("../middleware/authenticateUser");
 
 
 
@@ -15,10 +15,10 @@ const validateListingMiddleware = (req, res, next) => {
   console.log(req.body.listing);
   let { error } = validateListing.validate(req.body.listing);
   if (error) {
-  const msg = error.details.map(el => el.message).join(", ");
-  throw new ExpressError(400, msg);
-}
- else {
+    const msg = error.details.map(el => el.message).join(", ");
+    throw new ExpressError(400, msg);
+  }
+  else {
     next();
   }
 };
@@ -37,35 +37,45 @@ listingRouter.get(
 );
 
 // New Listing Form
-listingRouter.get("/new", async(req, res) => {
+listingRouter.get("/new", async (req, res) => {
   res.render("views/newListing");
 });
 
 //To search new listing
 // Search Route (GET)
 listingRouter.get("/search", wrapAsync(async (req, res) => {
-  const { query } = req.query;   
-  console.log(query);
+  const { query } = req.query;
+  // console.log(query);
   if (!query) {
-    return res.redirect("/listings"); 
+    return res.redirect("/listings");
   }
 
-  const listing = await allListing.findOne({title:query});
+  const listing = await allListing.findOne({ title: query });
 
   // Render results page
-  res.render("views/show.ejs", { listing});
+  res.render("views/show.ejs", { listing });
 }));
 
 
 // Save New Listing
 listingRouter.post(
   "/new",
-   validateListingMiddleware,
+  validateListingMiddleware,
+  authenticateJWT,
   wrapAsync(async (req, res) => {
     //console.log(req.body);
     const newListing = new allListing(req.body);
+
+    //console.log("All User",req.user);
+
+    newListing.owner = req.user._id;
+
+
     await newListing.save();
-    req.flash("success","Congratulations we listed your home!");
+
+    // console.log("Owner :",newListing.owner);
+    //console.log("Listing:",newListing);
+    req.flash("success", "Congratulations we listed your home!");
     res.redirect("/listings");
   })
 );
@@ -75,7 +85,9 @@ listingRouter.get(
   "/:id",
   wrapAsync(async (req, res) => {
     const { id } = req.params;
-    const listing = await allListing.findById(id).populate("reviews");
+    const listing = await allListing.findById(id).populate("reviews").populate("owner");
+
+
     if (!listing) throw new ExpressError(404, "Listing not found");
     res.render("views/show", { listing });
   })
@@ -102,8 +114,8 @@ listingRouter.put(
       new: true,
     });
     if (!updatedListing) throw new ExpressError(404, "Listing not found");
-    else req.flash("success","Listing edited successfully!");
-    
+    else req.flash("success", "Listing edited successfully!");
+
     res.redirect(`/listings/${id}`);
   })
 );
@@ -115,7 +127,7 @@ listingRouter.delete(
     const { id } = req.params;
     const deleted = await allListing.findByIdAndDelete(id);
     if (!deleted) throw new ExpressError(404, "Listing not found");
-    req.flash("error","Listing Delete successfully !");
+    req.flash("error", "Listing Delete successfully !");
     res.redirect("/listings");
   })
 );
@@ -123,5 +135,5 @@ listingRouter.delete(
 
 
 
-module.exports=listingRouter;
+module.exports = listingRouter;
 
