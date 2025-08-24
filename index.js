@@ -10,6 +10,8 @@ const userRouter = require("./router/userRouter");
 const session=require("express-session");
 const flash=require("connect-flash");
 const app = express();
+const cookieParser = require("cookie-parser");
+
 
 
 // Database Connection
@@ -29,7 +31,7 @@ main();
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 app.set("layout", "./layouts/boilerplate");
-
+app.use(cookieParser());
 app.use(expressLayouts);
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
