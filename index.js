@@ -11,6 +11,7 @@ const session=require("express-session");
 const flash=require("connect-flash");
 const app = express();
 const cookieParser = require("cookie-parser");
+const authenticateJWT = require("./middleware/authenticateUser");
 
 
 
@@ -46,6 +47,9 @@ app.use(session({
   }
 }))
 app.use(flash());
+
+
+
 app.use((req,res,next)=>{
   res.locals.success=req.flash("success");
   res.locals.error=req.flash("error");

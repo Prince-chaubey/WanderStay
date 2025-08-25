@@ -79,14 +79,12 @@
           </div>
 
           <!-- Submit -->
-          <% if (currentUser) { %>
-            <button type="submit"
-              class="px-6 py-3 bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-semibold rounded-xl hover:from-indigo-600 hover:to-purple-700 text-sm md:text-base shadow-lg transition">
-              Submit Review
-            </button>
-            <% } else { %>
-              <p class="text-red-500 text-sm mt-2">⚠️ You must be logged in to submit a review.</p>
-              <% } %>
+
+          <button type="submit"
+            class="px-6 py-3 bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-semibold rounded-xl hover:from-indigo-600 hover:to-purple-700 text-sm md:text-base shadow-lg transition">
+            Submit Review
+          </button>
+
         </form>
       </div>
 
@@ -113,21 +111,23 @@
                   <!-- Metadata -->
                   <div class="flex items-center text-sm text-gray-500 flex-col gap-4 mt-6">
                     <div>
-                      <span class="font-medium text-gray-700">👤 <%= listing.owner.username %></span>
+                      <span class="font-medium text-gray-700">
+                        👤 <%= review.author ? review.author.username : @i_ashish1%>
+                      </span>
                     </div>
 
-
-
-                    <!-- Delete Button -->
-                    <div>
-                      <form action="/listings/<%= listing._id %>/reviews/<%= review._id %>?_method=DELETE"
-                        method="POST">
-                        <button type="submit"
-                          class="flex items-center gap-1 text-red-500 hover:text-red-700 text-sm font-medium transition">
-                          🗑️ <span class="hidden sm:inline">Delete</span>
-                        </button>
-                      </form>
-                    </div>
+                  
+                    <% if (user && review.author && review.author._id.toString()===user._id.toString()) { %>
+                      <div>
+                        <form action="/listings/<%= listing._id %>/reviews/<%= review._id %>?_method=DELETE"
+                          method="POST">
+                          <button type="submit"
+                            class="flex items-center gap-1 text-red-500 hover:text-red-700 text-sm font-medium transition">
+                            🗑️ <span class="hidden sm:inline">Delete</span>
+                          </button>
+                        </form>
+                      </div>
+                      <% } %>
                   </div>
                 </div>
 

@@ -3,6 +3,7 @@ const wrapAsync = require("../utils/wrapAsync");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const User = require("../Models/userModel");
+const user = require("../Models/userModel");
 
 
 const userRouter = express.Router();
@@ -46,9 +47,10 @@ userRouter.post("/register", wrapAsync(async (req, res) => {
 }))
 
 //To login the user 
-userRouter.post("/login", wrapAsync(async (req, res) => {
+userRouter.post("/login",
+     wrapAsync(async (req, res) => {
     const { email, password } = req.body;
-    console.log(req.body);
+    // console.log(req.body);
 
     // checking if the user exists or not
     const user = await User.findOne({ email });
@@ -100,6 +102,12 @@ userRouter.get("/logout", (req, res) => {
 //To render the signup form
 userRouter.get("/signup", (req, res) => {
     res.render("views/signUp");
+})
+
+
+userRouter.get("/find",async(req,res)=>{
+    console.log(await User.find({}));
+    
 })
 
 //To render the login form

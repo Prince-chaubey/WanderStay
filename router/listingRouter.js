@@ -42,7 +42,6 @@ listingRouter.get("/new", async (req, res) => {
 });
 
 //To search new listing
-// Search Route (GET)
 listingRouter.get("/search", wrapAsync(async (req, res) => {
   const { query } = req.query;
   // console.log(query);
@@ -66,11 +65,12 @@ listingRouter.post(
     //console.log(req.body);
     const newListing = new allListing(req.body);
 
-    //console.log("All User",req.user);
+    console.log("Current User",req.user);
 
     newListing.owner = req.user._id;
-
-
+    //accessing the current user
+    
+    
     await newListing.save();
 
     // console.log("Owner :",newListing.owner);
@@ -83,15 +83,24 @@ listingRouter.post(
 // Show a Particular Listing
 listingRouter.get(
   "/:id",
+  authenticateJWT,
   wrapAsync(async (req, res) => {
     const { id } = req.params;
-    const listing = await allListing.findById(id).populate("reviews").populate("owner");
-
-
+    const listing = await allListing.findById(id)
+      .populate({
+        path: "reviews",
+        populate: { path: "author" }   
+      })
+      .populate("owner"); 
+    
     if (!listing) throw new ExpressError(404, "Listing not found");
-    res.render("views/show", { listing });
+
+    console.log(req.user);
+    
+    res.render("views/show", { listing});
   })
 );
+
 
 // Edit Listing Form
 listingRouter.get(
@@ -107,6 +116,7 @@ listingRouter.get(
 // Update Listing
 listingRouter.put(
   "/:id",
+  authenticateJWT,
   wrapAsync(async (req, res) => {
     const { id } = req.params;
     const updatedListing = await allListing.findByIdAndUpdate(id, req.body, {
@@ -123,6 +133,7 @@ listingRouter.put(
 // Delete Listing
 listingRouter.delete(
   "/:id",
+  authenticateJWT,
   wrapAsync(async (req, res) => {
     const { id } = req.params;
     const deleted = await allListing.findByIdAndDelete(id);

@@ -19,7 +19,7 @@ const authenticateJWT = async (req, res, next) => {
       return res.redirect("/user/login");
     }
 
-    
+    // Attach user to request (like passport does)
     req.user = user;
     res.locals.user = user;  // so you can use in EJS templates
 
@@ -30,5 +30,6 @@ const authenticateJWT = async (req, res, next) => {
     res.redirect("/user/login");
   }
 };
+
 
 module.exports=authenticateJWT;

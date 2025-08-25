@@ -5,6 +5,7 @@ const Review = require("../Models/Review");
 const { validateReview } = require("../validatation");
 const wrapAsync = require("../utils/wrapAsync");
 const ExpressError = require("../utils/expressError");
+const authenticateJWT = require("../middleware/authenticateUser");
 
 // Middleware to validate review
 const validateReviewMiddleware = (req, res, next) => {
@@ -22,9 +23,14 @@ const validateReviewMiddleware = (req, res, next) => {
 reviewRouter.post(
   "/",
   validateReviewMiddleware,
+  authenticateJWT,
   wrapAsync(async (req, res) => {
     const { id } = req.params; // parent route (/listings/:id/reviews)
     const listing = await allListing.findById(id);
+
+    //console.log("Review Listing",listing);
+    
+    //console.log("Current User for review:",req.user);
 
     if (!listing) {
       req.flash("error", "Listing not found!");
@@ -32,10 +38,16 @@ reviewRouter.post(
     }
 
     const { rating, comment } = req.body;
-    const newReview = new Review({ rating, comment });
+    const newReview = new Review({
+      rating,
+      comment,
+      author: req.user._id   
+    });
 
     await newReview.save();
     listing.reviews.push(newReview);
+
+   // console.log("Review edited listing:",listing);
     await listing.save();
 
     req.flash("success", "Review added successfully!");
