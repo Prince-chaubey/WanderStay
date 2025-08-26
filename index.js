@@ -11,7 +11,6 @@ const session=require("express-session");
 const flash=require("connect-flash");
 const app = express();
 const cookieParser = require("cookie-parser");
-const authenticateJWT = require("./middleware/authenticateUser");
 
 
 

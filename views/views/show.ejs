@@ -112,11 +112,11 @@
                   <div class="flex items-center text-sm text-gray-500 flex-col gap-4 mt-6">
                     <div>
                       <span class="font-medium text-gray-700">
-                        👤 <%= review.author ? review.author.username : @i_ashish1%>
+                        👤 <%= review.author ? review.author.username : "@i_ashish1" %>
                       </span>
                     </div>
 
-                  
+
                     <% if (user && review.author && review.author._id.toString()===user._id.toString()) { %>
                       <div>
                         <form action="/listings/<%= listing._id %>/reviews/<%= review._id %>?_method=DELETE"
@@ -127,7 +127,7 @@
                           </button>
                         </form>
                       </div>
-                      <% } %>
+                      <%}%>
                   </div>
                 </div>
 
@@ -151,10 +151,16 @@
             </a>
 
             <a href="/listings/<%= listing._id %>/edit">
-              <button
-                class="flex-1 px-4 py-2 bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-semibold rounded-xl hover:from-indigo-600 hover:to-purple-700 text-sm md:text-base shadow-lg transition">
-                Edit
-              </button>
+              <% if (user && listing && listing.owner._id.toString()===user._id.toString()) { %>
+                <button type="submit"
+                  class="flex-1 py-2 bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-semibold rounded-xl hover:from-indigo-600 hover:to-purple-700 transition">
+                  💾 Save Changes
+                </button>
+                <% } else { %>
+                  <p class="text-sm text-red-500 font-medium mt-2">
+                    ⚠️ Only the owner can save changes.
+                  </p>
+                  <% } %>
             </a>
           </div>
     </div>

@@ -5,7 +5,8 @@ const Review = require("../Models/Review");
 const { validateReview } = require("../validatation");
 const wrapAsync = require("../utils/wrapAsync");
 const ExpressError = require("../utils/expressError");
-const authenticateJWT = require("../middleware/authenticateUser");
+const { authenticateJWT, authorizeUser } = require("../middleware/authMiddleware");
+
 
 // Middleware to validate review
 const validateReviewMiddleware = (req, res, next) => {
@@ -58,6 +59,8 @@ reviewRouter.post(
 // Delete Review
 reviewRouter.delete(
   "/:reviewId",
+  authenticateJWT,
+  authorizeUser,
   wrapAsync(async (req, res) => {
     const { id, reviewId } = req.params;
 

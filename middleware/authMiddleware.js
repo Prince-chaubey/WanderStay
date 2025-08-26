@@ -1,5 +1,6 @@
 const jwt = require("jsonwebtoken");
 const User = require("../Models/userModel");
+const allListing=require("../Models/allListing");
 
 const authenticateJWT = async (req, res, next) => {
   try {
@@ -32,4 +33,22 @@ const authenticateJWT = async (req, res, next) => {
 };
 
 
-module.exports=authenticateJWT;
+const authorizeUser = async (req, res, next) => {
+  const { id } = req.params;
+  const listing = await allListing.findById(id);
+
+  if (!listing) {
+    req.flash("error", "Listing not found!");
+    return res.redirect("/listings");
+  }
+
+  if (!listing.owner.equals(req.user._id)) {
+    req.flash("error", "You are not authorized to delete this listing!");
+    return res.redirect(`/listings/${id}`);
+  }
+
+  next();
+};
+
+
+module.exports={authenticateJWT,authorizeUser};

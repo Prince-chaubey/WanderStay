@@ -5,7 +5,8 @@ const Review = require("../Models/Review");
 const { validateListing } = require("../validatation");
 const ExpressError = require("../utils/expressError");
 const wrapAsync = require("../utils/wrapAsync");
-const authenticateJWT = require("../middleware/authenticateUser");
+const { authenticateJWT, authorizeUser } = require("../middleware/authMiddleware");
+
 
 
 
@@ -95,9 +96,9 @@ listingRouter.get(
     
     if (!listing) throw new ExpressError(404, "Listing not found");
 
-    console.log(req.user);
+    //console.log(req.user);
     
-    res.render("views/show", { listing});
+    res.render("views/show", { listing,user:req.user});
   })
 );
 
@@ -105,11 +106,12 @@ listingRouter.get(
 // Edit Listing Form
 listingRouter.get(
   "/:id/edit",
+  authenticateJWT,
   wrapAsync(async (req, res) => {
     const { id } = req.params;
     const listing = await allListing.findById(id);
     if (!listing) throw new ExpressError(404, "Listing not found");
-    res.render("views/editListing", { listing });
+    res.render("views/editListing", { listing ,user:req.user});
   })
 );
 
@@ -134,6 +136,7 @@ listingRouter.put(
 listingRouter.delete(
   "/:id",
   authenticateJWT,
+  authorizeUser,
   wrapAsync(async (req, res) => {
     const { id } = req.params;
     const deleted = await allListing.findByIdAndDelete(id);
