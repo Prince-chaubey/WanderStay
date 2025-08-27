@@ -6,6 +6,7 @@ const { validateListing } = require("../validatation");
 const ExpressError = require("../utils/expressError");
 const wrapAsync = require("../utils/wrapAsync");
 const { authenticateJWT, authorizeUser } = require("../middleware/authMiddleware");
+const { index, showNewListing, searchListing, saveNewListing, editListing, updateListing, deleteListing } = require("../controllers/listingController");
 
 
 
@@ -31,30 +32,18 @@ const validateListingMiddleware = (req, res, next) => {
 
 listingRouter.get(
   "/",
-  wrapAsync(async (req, res) => {
-    const listings = await allListing.find({});
-    res.render("views/index", { listings });
-  })
+  wrapAsync(index)
 );
 
 // New Listing Form
-listingRouter.get("/new", async (req, res) => {
-  res.render("views/newListing");
-});
+listingRouter.get("/new",
+  showNewListing
+);
 
 //To search new listing
-listingRouter.get("/search", wrapAsync(async (req, res) => {
-  const { query } = req.query;
-  // console.log(query);
-  if (!query) {
-    return res.redirect("/listings");
-  }
-
-  const listing = await allListing.findOne({ title: query });
-
-  // Render results page
-  res.render("views/show.ejs", { listing });
-}));
+listingRouter.get("/search", wrapAsync(
+  searchListing
+));
 
 
 // Save New Listing
@@ -62,44 +51,18 @@ listingRouter.post(
   "/new",
   validateListingMiddleware,
   authenticateJWT,
-  wrapAsync(async (req, res) => {
-    //console.log(req.body);
-    const newListing = new allListing(req.body);
-
-    console.log("Current User",req.user);
-
-    newListing.owner = req.user._id;
-    //accessing the current user
-    
-    
-    await newListing.save();
-
-    // console.log("Owner :",newListing.owner);
-    //console.log("Listing:",newListing);
-    req.flash("success", "Congratulations we listed your home!");
-    res.redirect("/listings");
-  })
+  wrapAsync(
+    saveNewListing
+  )
 );
 
 // Show a Particular Listing
 listingRouter.get(
   "/:id",
   authenticateJWT,
-  wrapAsync(async (req, res) => {
-    const { id } = req.params;
-    const listing = await allListing.findById(id)
-      .populate({
-        path: "reviews",
-        populate: { path: "author" }   
-      })
-      .populate("owner"); 
-    
-    if (!listing) throw new ExpressError(404, "Listing not found");
-
-    //console.log(req.user);
-    
-    res.render("views/show", { listing,user:req.user});
-  })
+  wrapAsync(
+    showNewListing
+  )
 );
 
 
@@ -107,29 +70,18 @@ listingRouter.get(
 listingRouter.get(
   "/:id/edit",
   authenticateJWT,
-  wrapAsync(async (req, res) => {
-    const { id } = req.params;
-    const listing = await allListing.findById(id);
-    if (!listing) throw new ExpressError(404, "Listing not found");
-    res.render("views/editListing", { listing ,user:req.user});
-  })
+  wrapAsync(
+    editListing
+  )
 );
 
 // Update Listing
 listingRouter.put(
   "/:id",
   authenticateJWT,
-  wrapAsync(async (req, res) => {
-    const { id } = req.params;
-    const updatedListing = await allListing.findByIdAndUpdate(id, req.body, {
-      runValidators: true,
-      new: true,
-    });
-    if (!updatedListing) throw new ExpressError(404, "Listing not found");
-    else req.flash("success", "Listing edited successfully!");
-
-    res.redirect(`/listings/${id}`);
-  })
+  wrapAsync(
+    updateListing
+  )
 );
 
 // Delete Listing
@@ -137,13 +89,7 @@ listingRouter.delete(
   "/:id",
   authenticateJWT,
   authorizeUser,
-  wrapAsync(async (req, res) => {
-    const { id } = req.params;
-    const deleted = await allListing.findByIdAndDelete(id);
-    if (!deleted) throw new ExpressError(404, "Listing not found");
-    req.flash("error", "Listing Delete successfully !");
-    res.redirect("/listings");
-  })
+  wrapAsync(deleteListing)
 );
 
 

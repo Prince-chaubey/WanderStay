@@ -1,34 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>NestErra</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap"
-      rel="stylesheet"
-    />
-      <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" rel="stylesheet">
-  </head>
-  <body class="bg-gray-50 font-[Inter] min-h-screen flex flex-col">
-    <!-- Navbar -->
-    <div class="fixed top-0 left-0 w-full z-50 shadow">
-      <%- include('../includes/Navbar.ejs') %>
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NestErra</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css"
+    integrity="sha512-DxV+EoADOkOygM4IR9yXP8Sb2qwgidEmeqAEmDKIOfPRQZOWbXCzLC6vjbZyy0vPisbH2SyW27+ddLVCN+OMzQ=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" rel="stylesheet">
+</head>
+
+<body class="bg-gray-50 font-[Inter] min-h-screen flex flex-col">
+  <!-- Navbar -->
+  <div class="fixed top-0 left-0 w-full z-50 shadow">
+    <%- include('../includes/Navbar.ejs') %>
+  </div>
+
+
+  <main class="container mx-auto flex-1 px-4">
+    <!-- Main Content -->
+    <div class="mt-[100px]">
+      <%- include('../includes/flash.ejs')%>
     </div>
+    <div><%- body %></div>
+  </main>
 
+  <!-- Footer -->
+  <footer class="mt-10 bg-white shadow-inner py-6">
+    <%- include('../includes/Footer.ejs') %>
+  </footer>
+</body>
 
-    <main class="container mx-auto flex-1 px-4">
-      <!-- Main Content -->
-     <div class="mt-[100px]">
-       <%- include('../includes/flash.ejs')%>
-     </div>
-      <div><%- body %></div>
-    </main>
-
-    <!-- Footer -->
-    <footer class="mt-10 bg-white shadow-inner py-6">
-      <%- include('../includes/Footer.ejs') %>
-    </footer>
-  </body>
 </html>
