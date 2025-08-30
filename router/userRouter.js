@@ -19,7 +19,8 @@ userRouter.get("/signup", userController.getSignupForm);
 // Login Form for User
 userRouter.get("/login", userController.getLoginForm);
 
-// Debug 
+// Just for sake of Debugging 
 userRouter.get("/find", wrapAsync(userController.findUsers));
 
-module.exports = userRouter;
+
+module.exports=userRouter;
