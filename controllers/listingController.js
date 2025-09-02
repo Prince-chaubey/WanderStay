@@ -1,5 +1,7 @@
 const allListing=require("../Models/allListing")
 const {ExpressError}=require("../utils/expressError")
+const cloudinary = require("cloudinary").v2;
+
 module.exports.index=async (req, res) => {
     const listings = await allListing.find({});
     res.render("views/index", { listings });
@@ -76,17 +78,47 @@ module.exports.editListing=async (req, res) => {
     res.render("views/editListing", { listing ,user:req.user});
   }
 
-module.exports.updateListing=async (req, res) => {
+module.exports.updateListing = async (req, res) => {
+  try {
     const { id } = req.params;
-    const updatedListing = await allListing.findByIdAndUpdate(id, req.body, {
-      runValidators: true,
-      new: true,
-    });
-    if (!updatedListing) throw new ExpressError(404, "Listing not found");
-    else req.flash("success", "Listing edited successfully!");
 
-    res.redirect(`/listings/${id}`);
+    // Find the listing
+    const listing = await allListing.findById(id);
+    if (!listing) {
+      req.flash("error", "Listing not found!");
+      return res.redirect("/listings");
+    }
+
+    // Update normal fields
+    listing.title = req.body.title;
+    listing.location = req.body.location;
+    listing.country = req.body.country;
+    listing.price = req.body.price;
+    listing.description = req.body.description;
+
+   
+   if (req.file) {
+  const result = await cloudinary.uploader.upload(req.file.path, {
+    folder: "wanderstay_listings",
+  });
+
+  // Save properly into the url object
+  listing.url = {
+    url: result.secure_url,
+    filename: result.public_id
+  };
+}
+
+    await listing.save();
+
+    req.flash("success", "Listing updated successfully ");
+    res.redirect(`/listings/${listing._id}`);
+  } catch (err) {
+    console.error(err);
+    req.flash("error", "Something went wrong while updating!");
+    res.redirect("/listings");
   }
+};
 
 module.exports.deleteListing=async (req, res) => {
     const { id } = req.params;

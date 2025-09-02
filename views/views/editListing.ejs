@@ -4,7 +4,7 @@
     <h2 class="text-2xl md:text-3xl font-bold text-gray-800 text-center mb-6">✏️ Edit Listing</h2>
 
     <!-- Form to update listing -->
-    <form action="/listings/<%= listing._id %>?_method=PUT" method="POST" class="space-y-5">
+    <form action="/listings/<%= listing._id %>?_method=PUT" method="POST" enctype="multipart/form-data" class="space-y-5">
 
       <!-- Title -->
       <div>
@@ -34,11 +34,19 @@
           class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 transition outline-none" />
       </div>
 
-      <!-- Image URL -->
+      <!-- Current Image Preview -->
       <div>
-        <label class="block text-gray-700 font-medium mb-1">Image URL</label>
-        <input type="url" name="url" value="<%= listing.url %>" required
-          class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 transition outline-none" />
+        <label class="block text-gray-700 font-medium mb-1">Current Image</label>
+        <img src="<%= listing.url.url %>" alt="Current Listing Image" 
+             class="w-full max-h-64 object-cover rounded-xl shadow-md border border-gray-300" />
+      </div>
+
+      <!-- Upload New Image -->
+      <div>
+        <label class="block text-gray-700 font-medium mb-1">Upload New Image</label>
+        <input type="file" name="image" accept="image/*"
+          class="w-full px-3 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 transition outline-none" />
+        <p class="text-sm text-gray-500 mt-1">Leave empty if you don’t want to change the image.</p>
       </div>
 
       <!-- Description -->
@@ -61,8 +69,6 @@
           class="flex-1 py-2 bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-semibold rounded-xl hover:from-indigo-600 hover:to-purple-700 transition">
           💾 Save Changes
         </button>
-        
-
       </div>
     </form>
   </div>

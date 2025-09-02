@@ -153,8 +153,8 @@
             <a href="/listings/<%= listing._id %>/edit">
               <% if (user && listing && listing.owner._id.toString()===user._id.toString()) { %>
                 <button type="submit"
-                  class="flex-1 py-2 bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-semibold rounded-xl hover:from-indigo-600 hover:to-purple-700 transition">
-                  💾 Save Changes
+                  class="flex-1 p-2 bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-semibold rounded-xl hover:from-indigo-600 hover:to-purple-700 transition">
+                  ✏️ Edit
                 </button>
                 <% } else { %>
                   <p class="text-sm text-red-500 font-medium mt-2">

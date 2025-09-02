@@ -69,7 +69,7 @@ listingRouter.get("/:id", authenticateJWT, wrapAsync(showListing));
 listingRouter.get("/:id/edit", authenticateJWT, wrapAsync(editListing));
 
 // Update Listing
-listingRouter.put("/:id", authenticateJWT, wrapAsync(updateListing));
+listingRouter.put("/:id", authenticateJWT, upload.single("image"), wrapAsync(updateListing));
 
 // Delete Listing
 listingRouter.delete("/:id", authenticateJWT, authorizeUser, wrapAsync(deleteListing));
