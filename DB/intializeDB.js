@@ -2,10 +2,12 @@ const {data}=require("../Datas/data");
 const mongoose=require("mongoose");
 const allListing=require("../Models/allListing");
 
+require("dotenv").config();
 
 async function main() {
   try {
-    await mongoose.connect("mongodb://127.0.0.1:27017/wanderstay");
+    const URL=process.env.DB_URL;
+    await mongoose.connect(URL);
     console.log("Connected to MongoDB");
   } catch (err) {
     console.error("MongoDB connection error:", err);

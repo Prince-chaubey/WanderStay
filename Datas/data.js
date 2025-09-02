@@ -9,7 +9,7 @@ const sampleListings = [
     price: 1500,
     location: "Malibu",
     country: "United States",
-    owner: "68acb3872b7ff5f8f2b2a453"
+    owner:"68b73937557554c68d5fd90a"
   },
   {
     title: "Modern Loft in Downtown",
@@ -21,7 +21,7 @@ const sampleListings = [
     price: 1200,
     location: "New York City",
     country: "United States",
-    owner: "68acb3872b7ff5f8f2b2a453"
+    owner:"68b73937557554c68d5fd90a"
   },
   {
     title: "Mountain Retreat",
@@ -33,7 +33,7 @@ const sampleListings = [
     price: 1000,
     location: "Aspen",
     country: "United States",
-    owner: "68acb3872b7ff5f8f2b2a453"
+    owner:"68b73937557554c68d5fd90a"
   },
   {
     title: "Historic Villa in Tuscany",
@@ -45,7 +45,7 @@ const sampleListings = [
     price: 2500,
     location: "Florence",
     country: "Italy",
-    owner: "68acb3872b7ff5f8f2b2a453"
+    owner:"68b73937557554c68d5fd90a"
   },
   {
     title: "Secluded Treehouse Getaway",
@@ -57,7 +57,7 @@ const sampleListings = [
     price: 800,
     location: "Portland",
     country: "United States",
-    owner: "68acb3872b7ff5f8f2b2a453"
+    owner:"68b73937557554c68d5fd90a"
   },
   {
     title: "Beachfront Paradise",
@@ -69,7 +69,7 @@ const sampleListings = [
     price: 2000,
     location: "Cancun",
     country: "Mexico",
-    owner: "68acb3872b7ff5f8f2b2a453"
+    owner:"68b73937557554c68d5fd90a"
   },
   {
     title: "Luxury Penthouse with City Views",
@@ -81,7 +81,7 @@ const sampleListings = [
     price: 5000,
     location: "Dubai",
     country: "UAE",
-    owner: "68acb3872b7ff5f8f2b2a453"
+    owner:"68b73937557554c68d5fd90a"
   },
   {
     title: "Charming Countryside B&B",
@@ -93,7 +93,7 @@ const sampleListings = [
     price: 600,
     location: "Cotswolds",
     country: "United Kingdom",
-    owner: "68acb3872b7ff5f8f2b2a453"
+    owner:"68b73937557554c68d5fd90a"
   },
   {
     title: "Desert Oasis Camp",
@@ -105,7 +105,7 @@ const sampleListings = [
     price: 900,
     location: "Sahara Desert",
     country: "Morocco",
-    owner: "68acb3872b7ff5f8f2b2a453"
+    owner:"68b73937557554c68d5fd90a"
   },
   {
     title: "Lakeside Cabin Escape",
@@ -117,7 +117,7 @@ const sampleListings = [
     price: 1100,
     location: "Lake Tahoe",
     country: "United States",
-    owner: "68acb3872b7ff5f8f2b2a453"
+    owner:"68b73937557554c68d5fd90a"
   },
   {
     title: "Japanese Zen House",
@@ -129,7 +129,7 @@ const sampleListings = [
     price: 1800,
     location: "Kyoto",
     country: "Japan",
-    owner: "68acb3872b7ff5f8f2b2a453"
+    owner:"68b73937557554c68d5fd90a"
   },
   {
     title: "Icelandic Glass Igloo",
@@ -141,7 +141,7 @@ const sampleListings = [
     price: 2200,
     location: "Reykjavik",
     country: "Iceland",
-    owner: "68acb3872b7ff5f8f2b2a453"
+    owner:"68b73937557554c68d5fd90a"
   },
   {
     title: "Santorini Cliffside Suite",
@@ -153,7 +153,7 @@ const sampleListings = [
     price: 3000,
     location: "Santorini",
     country: "Greece",
-    owner: "68acb3872b7ff5f8f2b2a453"
+    owner:"68b73937557554c68d5fd90a"
   },
   {
     title: "Safari Lodge",
@@ -165,7 +165,7 @@ const sampleListings = [
     price: 4000,
     location: "Serengeti",
     country: "Tanzania",
-    owner: "68acb3872b7ff5f8f2b2a453"
+    owner:"68b73937557554c68d5fd90a"
   },
   {
     title: "Swiss Alps Chalet",
@@ -177,7 +177,7 @@ const sampleListings = [
     price: 2800,
     location: "Zermatt",
     country: "Switzerland",
-    owner: "68acb3872b7ff5f8f2b2a453"
+    owner:"68b73937557554c68d5fd90a"
   },
   {
     title: "Parisian Apartment",
@@ -189,7 +189,7 @@ const sampleListings = [
     price: 2600,
     location: "Paris",
     country: "France",
-    owner: "68acb3872b7ff5f8f2b2a453"
+    owner:"68b73937557554c68d5fd90a"
   },
   {
     title: "Dubai Desert Villa",
@@ -201,7 +201,7 @@ const sampleListings = [
     price: 5000,
     location: "Dubai",
     country: "UAE",
-    owner: "68acb3872b7ff5f8f2b2a453"
+    owner:"68b73937557554c68d5fd90a"
   },
   {
     title: "Himalayan Mountain Cabin",
@@ -213,7 +213,7 @@ const sampleListings = [
     price: 1400,
     location: "Manali",
     country: "India",
-    owner: "68acb3872b7ff5f8f2b2a453"
+    owner:"68b73937557554c68d5fd90a"
   },
   {
     title: "Rainforest Eco Lodge",
@@ -225,7 +225,7 @@ const sampleListings = [
     price: 1600,
     location: "Costa Rica",
     country: "Costa Rica",
-    owner: "68acb3872b7ff5f8f2b2a453"
+    owner:"68b73937557554c68d5fd90a"
   },
   {
     title: "Moroccan Riad",
@@ -237,7 +237,7 @@ const sampleListings = [
     price: 1900,
     location: "Marrakech",
     country: "Morocco",
-    owner: "68acb3872b7ff5f8f2b2a453"
+    owner:"68b73937557554c68d5fd90a"
   },
   {
     title: "Sydney Harbour Apartment",
@@ -249,7 +249,7 @@ const sampleListings = [
     price: 2700,
     location: "Sydney",
     country: "Australia",
-    owner: "68acb3872b7ff5f8f2b2a453"
+    owner:"68b73937557554c68d5fd90a"
   }
 ];
 
