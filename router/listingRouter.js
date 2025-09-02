@@ -37,11 +37,13 @@ listingRouter.get(
 
 // New Listing Form
 listingRouter.get("/new",
+  authenticateJWT,
   showNewListing
 );
 
 //To search new listing
-listingRouter.get("/search", wrapAsync(
+listingRouter.get("/search", 
+  wrapAsync(
   searchListing
 ));
 
