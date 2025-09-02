@@ -10,6 +10,7 @@ const userRouter = require("./router/userRouter");
 const session=require("express-session");
 const flash=require("connect-flash");
 const app = express();
+require("dotenv").config();
 const cookieParser = require("cookie-parser");
 
 

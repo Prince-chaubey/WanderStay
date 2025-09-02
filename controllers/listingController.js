@@ -1,5 +1,5 @@
 const allListing=require("../Models/allListing")
-
+const {ExpressError}=require("../utils/expressError")
 module.exports.index=async (req, res) => {
     const listings = await allListing.find({});
     res.render("views/index", { listings });
@@ -22,23 +22,36 @@ module.exports.searchListing=async (req, res) => {
   res.render("views/show.ejs", { listing });
 }
 
-module.exports.saveNewListing=async (req, res) => {
-    //console.log(req.body);
+module.exports.saveNewListing = async (req, res) => {
+  try {
+    // Create a new listing with form data
     const newListing = new allListing(req.body);
 
-    console.log("Current User",req.user);
+    //console.log("Current User:", req.user);
 
+    // Assign current user as owner
     newListing.owner = req.user._id;
-    //accessing the current user
-    
-    
+
+    // If file was uploaded, save its path in the DB
+    if (req.file) {
+      // If using local storage:
+      const url=req.file.path;
+      const filename=req.file.filename;
+      newListing.url = {url,filename};
+     
+    }
+
+    // Save the listing in DB
     await newListing.save();
 
-    // console.log("Owner :",newListing.owner);
-    //console.log("Listing:",newListing);
-    req.flash("success", "Congratulations we listed your home!");
+    req.flash("success", "Congratulations! We listed your home!");
     res.redirect("/listings");
+  } catch (err) {
+    console.error("Error saving listing:", err);
+    req.flash("error", "Something went wrong while saving your listing.");
+    res.redirect("/listings/new");
   }
+};
 
 module.exports.showListing=async (req, res) => {
     const { id } = req.params;

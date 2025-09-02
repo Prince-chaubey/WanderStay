@@ -1,101 +1,80 @@
 const express = require("express");
 const listingRouter = express.Router();
+
+// Models
 const allListing = require("../Models/allListing");
 const Review = require("../Models/Review");
+
+// Utils & Middlewares
 const { validateListing } = require("../validatation");
 const ExpressError = require("../utils/expressError");
 const wrapAsync = require("../utils/wrapAsync");
 const { authenticateJWT, authorizeUser } = require("../middleware/authMiddleware");
-const { index, showNewListing, searchListing, saveNewListing, editListing, updateListing, deleteListing } = require("../controllers/listingController");
 
+// Controllers
+const {
+  index,
+  showNewListing,
+  searchListing,
+  saveNewListing,
+  editListing,
+  updateListing,
+  deleteListing,
+  showListing
+} = require("../controllers/listingController");
 
+// Multer (for image uploads)
+const multer = require("multer");
+const { storage } = require("../utils/cloud_config");
+const upload = multer({ storage });
 
-
-
-// Listing Validation Middleware
-const validateListingMiddleware = (req, res, next) => {
-  console.log(req.body.listing);
-  let { error } = validateListing.validate(req.body.listing);
+/* ----------------------
+   VALIDATION MIDDLEWARE
+------------------------- */
+function validateListingMiddleware(req, res, next) {
+  const { error } = validateListing.validate(req.body);
   if (error) {
-    const msg = error.details.map(el => el.message).join(", ");
-    throw new ExpressError(400, msg);
+    const msg = error.details.map(el => el.message).join(",");
+    throw new ExpressError(msg, 400);
   }
-  else {
-    next();
-  }
-};
+  next();
+}
 
+/* ----------------------
+          ROUTES
+------------------------- */
 
+// Home / Index (All Listings)
+listingRouter.get("/", wrapAsync(index));
 
-
-//Home Route
-
-listingRouter.get(
-  "/",
-  wrapAsync(index)
-);
+// Search Listings
+listingRouter.get("/search", wrapAsync(searchListing));
 
 // New Listing Form
-listingRouter.get("/new",
-  authenticateJWT,
-  showNewListing
-);
-
-//To search new listing
-listingRouter.get("/search", 
-  wrapAsync(
-  searchListing
-));
-
+listingRouter.get("/new", authenticateJWT, showNewListing);
 
 // Save New Listing
 listingRouter.post(
   "/new",
+  authenticateJWT,
+  upload.single("image"),
   validateListingMiddleware,
-  authenticateJWT,
-  wrapAsync(
-    saveNewListing
-  )
+  wrapAsync(saveNewListing)
 );
 
-// Show a Particular Listing
-listingRouter.get(
-  "/:id",
-  authenticateJWT,
-  wrapAsync(
-    showNewListing
-  )
-);
-
+// Show Single Listing
+listingRouter.get("/:id", authenticateJWT, wrapAsync(showListing));
 
 // Edit Listing Form
-listingRouter.get(
-  "/:id/edit",
-  authenticateJWT,
-  wrapAsync(
-    editListing
-  )
-);
+listingRouter.get("/:id/edit", authenticateJWT, wrapAsync(editListing));
 
 // Update Listing
-listingRouter.put(
-  "/:id",
-  authenticateJWT,
-  wrapAsync(
-    updateListing
-  )
-);
+listingRouter.put("/:id", authenticateJWT, wrapAsync(updateListing));
 
 // Delete Listing
-listingRouter.delete(
-  "/:id",
-  authenticateJWT,
-  authorizeUser,
-  wrapAsync(deleteListing)
-);
+listingRouter.delete("/:id", authenticateJWT, authorizeUser, wrapAsync(deleteListing));
 
-
-
-
+/* ----------------------
+       EXPORT ROUTER
+------------------------- */
 module.exports = listingRouter;
-

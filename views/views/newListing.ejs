@@ -27,27 +27,27 @@
 
       <div>
         <label class="block text-gray-700 font-medium mb-1">Price (₹ per night)</label>
-        <input type="text" name="price" placeholder="1500"
+        <input type="number" name="price" placeholder="1500"
           class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition outline-none" />
         <p class="text-red-500 text-sm mt-1 hidden" id="priceError"></p>
       </div>
 
-      <div>
+      <!-- <div>
         <label class="block text-gray-700 font-medium mb-1">Image URL</label>
         <input type="url" name="url" placeholder="https://example.com/image.jpg"
           class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition outline-none" />
         <p class="text-red-500 text-sm mt-1 hidden" id="urlError"></p>
-      </div>
+      </div> -->
 
       <div>
-  <label class="block text-gray-700 font-medium mb-1">Upload Image</label>
-  <input type="file" name="image" accept="image/*"
-    class="w-full px-4 py-2 rounded-lg border border-gray-300 file:mr-4 file:py-2 file:px-4
-           file:rounded-lg file:border-0 file:text-sm file:font-semibold
-           file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100
-           focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition outline-none" />
-  <p class="text-red-500 text-sm mt-1 hidden" id="imageError"></p>
-</div>
+        <label class="block text-gray-700 font-medium mb-1">Upload Image</label>
+        <input type="file" name="image" accept="image/*"
+          class="w-full px-4 py-2 rounded-lg border border-gray-300 file:mr-4 file:py-2 file:px-4
+                 file:rounded-lg file:border-0 file:text-sm file:font-semibold
+                 file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100
+                 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition outline-none" />
+        <p class="text-red-500 text-sm mt-1 hidden" id="imageError"></p>
+      </div>
 
       <div>
         <label class="block text-gray-700 font-medium mb-1">Description</label>
@@ -74,8 +74,8 @@
       const country = form.country.value.trim();
       const price = form.price.value.trim();
       const url = form.url.value.trim();
+      const file = form.image.files[0];
       const description = form.description.value.trim();
-
 
       // Reset error messages
       document.querySelectorAll("p[id$='Error']").forEach(err => {
@@ -106,9 +106,14 @@
         document.getElementById("priceError").classList.remove("hidden");
         isValid = false;
       }
-      if(url.length==0){
-        document.getElementById("urlError").innerText="Image URL is required to list your home";
+
+      // ✅ Check if user provided either URL or File
+      if (!url && !file) {
+        document.getElementById("urlError").innerText = "Please provide an Image URL or upload a file.";
         document.getElementById("urlError").classList.remove("hidden");
+        document.getElementById("imageError").innerText = "Please provide an Image URL or upload a file.";
+        document.getElementById("imageError").classList.remove("hidden");
+        isValid = false;
       }
 
       if (description.length < 10) {
