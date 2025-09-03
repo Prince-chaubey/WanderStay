@@ -21,7 +21,7 @@ module.exports.searchListing=async (req, res) => {
   const listing = await allListing.findOne({ title: query });
 
   // Render results page
-  res.render("views/show.ejs", { listing });
+  res.render("views/show.ejs", { listing,user:req.user});
 }
 
 module.exports.saveNewListing = async (req, res) => {
