@@ -5,7 +5,7 @@ const Review = require("../Models/Review");
 const { validateReview } = require("../validatation");
 const wrapAsync = require("../utils/wrapAsync");
 const ExpressError = require("../utils/expressError");
-const { authenticateJWT, authorizeUser } = require("../middleware/authMiddleware");
+const { authenticateJWT, authorizeUser, isReviewAuthor } = require("../middleware/authMiddleware");
 const { createReview, deleteReview } = require("../controllers/reviewController");
 
 
@@ -35,7 +35,7 @@ reviewRouter.post(
 reviewRouter.delete(
   "/:reviewId",
   authenticateJWT,
-  authorizeUser,
+  isReviewAuthor,
   wrapAsync(
     deleteReview
   )

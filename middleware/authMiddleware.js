@@ -1,7 +1,7 @@
 const jwt = require("jsonwebtoken");
 const User = require("../Models/userModel");
 const allListing=require("../Models/allListing");
-
+const Review=require("../Models/Review")
 const authenticateJWT = async (req, res, next) => {
   try {
     const token = req.cookies.token || req.headers["authorization"]?.split(" ")[1]; 
@@ -51,4 +51,20 @@ const authorizeUser = async (req, res, next) => {
 };
 
 
-module.exports={authenticateJWT,authorizeUser};
+const isReviewAuthor = async (req, res, next) => {
+  const { id, reviewId } = req.params;
+
+  const review = await Review.findById(reviewId);
+  if (!review) {
+    throw new ExpressError(404, "Review not found");
+  }
+
+  if (!review.author.equals(req.user._id)) {
+    req.flash("error", "⛔ You do not have permission to do that!");
+    return res.redirect(`/listings/${id}`);
+  }
+
+  next();
+};
+
+module.exports={authenticateJWT,authorizeUser,isReviewAuthor};

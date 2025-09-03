@@ -1,8 +1,7 @@
-<body
-  class="bg-gradient-to-br from-gray-100 via-indigo-50 to-purple-100 min-h-screen flex flex-col items-center font-sans">
+<body class="bg-gradient-to-br from-gray-100 via-indigo-50 to-purple-100 min-h-screen flex flex-col items-center font-sans">
 
   <!-- Header -->
-  <header class="w-full text-center py-8 mb-6 mt-10">
+  <header class="w-full text-center py-8 mb-8 mt-12">
     <h1 class="text-3xl md:text-4xl font-extrabold text-gray-900 tracking-tight drop-shadow-sm">
       🏡 <%= listing.title %>
     </h1>
@@ -27,23 +26,26 @@
     </div>
 
     <!-- Details -->
-    <div class="p-8 md:p-10">
+    <div class="p-8 md:p-10 space-y-8">
+
+      <!-- Price + Host -->
       <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-3">
         <p class="text-2xl font-bold text-indigo-600">
           ₹<%= listing.price %>
-            <span class="text-sm text-gray-500 font-medium">/ night</span>
+          <span class="text-sm text-gray-500 font-medium">/ night</span>
         </p>
-        <p class="text-gray-500 text-sm italic">Hosted by <span class="font-semibold text-gray-700">
-            <%= listing.owner.username %>
-          </span></p>
+        <p class="text-gray-500 text-sm italic">
+          Hosted by <span class="font-semibold text-gray-700"><%= listing.owner.username %></span>
+        </p>
       </div>
 
-      <p class="mt-4 text-gray-700 text-base leading-relaxed">
+      <!-- Description -->
+      <p class="text-gray-700 text-base leading-relaxed">
         <%= listing.description %>
       </p>
 
       <!-- Features -->
-      <div class="mt-8 grid grid-cols-2 md:grid-cols-4 gap-4 text-sm md:text-base text-gray-700 font-medium">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm md:text-base text-gray-700 font-medium">
         <div class="flex items-center gap-2 bg-gray-50 px-3 py-2 rounded-lg">🛏️ <span>2 Beds</span></div>
         <div class="flex items-center gap-2 bg-gray-50 px-3 py-2 rounded-lg">🚿 <span>1 Bath</span></div>
         <div class="flex items-center gap-2 bg-gray-50 px-3 py-2 rounded-lg">📶 <span>WiFi</span></div>
@@ -51,23 +53,20 @@
       </div>
 
       <!-- ⭐ Rating & Comment Section -->
-      <div class="mt-12 border-t pt-8">
+      <div class="border-t pt-8">
         <h2 class="text-xl md:text-2xl font-bold text-gray-900 mb-6">Rate this Property</h2>
 
         <form action="/listings/<%= listing._id %>/reviews" method="POST" class="space-y-6">
-
           <!-- Rating -->
           <div>
             <label class="block text-sm font-semibold text-gray-700 mb-2">Your Rating</label>
-            <div class="flex gap-3">
+            <div class="flex gap-4">
               <% for(let i=1; i<=5; i++){ %>
                 <label class="flex items-center gap-1 cursor-pointer">
                   <input type="radio" name="rating" value="<%= i %>" class="text-indigo-600" required>
-                  <span class="text-sm">
-                    <%= i %> ⭐
-                  </span>
+                  <span class="text-sm"><%= i %> ⭐</span>
                 </label>
-                <% } %>
+              <% } %>
             </div>
           </div>
 
@@ -79,55 +78,48 @@
           </div>
 
           <!-- Submit -->
-
           <button type="submit"
-            class="px-6 py-3 bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-semibold rounded-xl hover:from-indigo-600 hover:to-purple-700 text-sm md:text-base shadow-lg transition">
+            class="w-full sm:w-auto px-6 py-3 bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-semibold rounded-xl hover:from-indigo-600 hover:to-purple-700 text-sm md:text-base shadow-lg transition">
             Submit Review
           </button>
-
         </form>
       </div>
 
       <!-- 📌 Display Reviews -->
-      <% if(listing.reviews && listing.reviews.length> 0) { %>
-        <div class="mt-12 border-t pt-8">
+      <% if(listing.reviews && listing.reviews.length>0) { %>
+        <div class="border-t pt-8">
           <h2 class="text-xl md:text-2xl font-bold text-gray-900 mb-6">What People Are Saying</h2>
 
           <div class="space-y-6">
             <% listing.reviews.forEach(review=> { %>
               <div class="bg-gray-50 border border-gray-200 rounded-xl p-5 shadow-sm hover:shadow-md transition">
-                <div class="flex items-center justify-between mb-3">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-4">
+                  
                   <!-- Stars -->
                   <div class="flex items-center">
                     <% for(let i=1; i<=5; i++){ %>
                       <% if(i <=review.rating) { %>
                         <span class="text-yellow-400 text-lg">★</span>
-                        <% } else { %>
-                          <span class="text-gray-300 text-lg">★</span>
-                          <% } %>
-                            <% } %>
+                      <% } else { %>
+                        <span class="text-gray-300 text-lg">★</span>
+                      <% } %>
+                    <% } %>
                   </div>
 
                   <!-- Metadata -->
-                  <div class="flex items-center text-sm text-gray-500 flex-col gap-4 mt-6">
-                    <div>
-                      <span class="font-medium text-gray-700">
-                        👤 <%= review.author ? review.author.username : "Unknown Reviewer" %>
-                      </span>
-                    </div>
-
+                  <div class="flex items-center gap-4 mt-3 sm:mt-0 text-sm text-gray-500">
+                    <span class="font-medium text-gray-700">
+                      👤 <%= review.author ? review.author.username : "Unknown Reviewer" %>
+                    </span>
 
                     <% if (user && review.author && review.author._id.toString()===user._id.toString()) { %>
-                      <div>
-                        <form action="/listings/<%= listing._id %>/reviews/<%= review._id %>?_method=DELETE"
-                          method="POST">
-                          <button type="submit"
-                            class="flex items-center gap-1 text-red-500 hover:text-red-700 text-sm font-medium transition">
-                            🗑️ <span class="hidden sm:inline">Delete</span>
-                          </button>
-                        </form>
-                      </div>
-                      <%}%>
+                      <form action="/listings/<%= listing._id %>/reviews/<%= review._id %>?_method=DELETE" method="POST">
+                        <button type="submit"
+                          class="flex items-center gap-1 text-red-500 hover:text-red-700 text-sm font-medium transition">
+                          🗑️ <span class="hidden sm:inline">Delete</span>
+                        </button>
+                      </form>
+                    <% } %>
                   </div>
                 </div>
 
@@ -136,33 +128,36 @@
                   <%= review.comment %>
                 </p>
               </div>
-              <% }) %>
+            <% }) %>
           </div>
         </div>
+      <% } %>
+
+      <!-- Back / Edit / Delete Buttons -->
+      <div class="mt-10 flex flex-col sm:flex-row justify-between gap-4">
+        <a href="/listings" class="flex-1">
+          <button
+            class="w-full px-4 py-2 bg-gray-200 text-gray-700 font-medium rounded-xl hover:bg-gray-300 text-sm md:text-base transition">
+            ← Back
+          </button>
+        </a>
+
+        <% if (user && listing && listing.owner._id.toString()===user._id.toString()) { %>
+          <a href="/listings/<%= listing._id %>/edit" class="flex-1">
+            <button
+              class="w-full px-4 py-2 bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-semibold rounded-xl hover:from-indigo-600 hover:to-purple-700 text-sm md:text-base transition">
+              ✏️ Edit
+            </button>
+          </a>
+
+          <form action="/listings/<%= listing._id %>?_method=DELETE" method="POST" class="flex-1">
+            <button
+              class="w-full px-4 py-2 bg-red-500 text-white font-medium rounded-xl hover:bg-red-600 text-sm md:text-base transition">
+              🗑️ Delete
+            </button>
+          </form>
         <% } %>
-
-          <!-- Back and Edit Buttons -->
-          <div class="mt-10 flex flex-col sm:flex-row justify-between gap-4">
-            <a href="/listings" class="flex-1">
-              <button
-                class="w-full px-4 py-2 bg-gray-200 text-gray-700 font-medium rounded-xl hover:bg-gray-300 text-sm md:text-base transition">
-                ← Back
-              </button>
-            </a>
-
-            <a href="/listings/<%= listing._id %>/edit">
-              <% if (user && listing && listing.owner._id.toString()===user._id.toString()) { %>
-                <button type="submit"
-                  class="flex-1 p-2 bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-semibold rounded-xl hover:from-indigo-600 hover:to-purple-700 transition">
-                  ✏️ Edit
-                </button>
-                <% } else { %>
-                  <p class="text-sm text-red-500 font-medium mt-2">
-                    ⚠️ Only the owner can save changes.
-                  </p>
-                  <% } %>
-            </a>
-          </div>
+      </div>
     </div>
   </div>
 
